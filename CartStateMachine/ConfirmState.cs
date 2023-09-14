@@ -17,10 +17,11 @@ namespace CartStateMachine
             errorStatus = false;
             _cartItems = cartItems;
             _paymentAmount = 0;
+            _totalPrice = 0;
 
             foreach (KeyValuePair<string, int> entry in _cartItems)
             {
-                _totalPrice += storeRates[entry.Key];
+                _totalPrice += storeRates[entry.Key] * entry.Value;
             }
         }
         private void SetError(string error)
@@ -54,6 +55,8 @@ namespace CartStateMachine
             }
             else
             {
+                // Empty cart after payment
+                _cartItems.Clear();
                 UnsetError();
             }
         }
