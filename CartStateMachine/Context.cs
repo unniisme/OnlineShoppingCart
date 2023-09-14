@@ -37,7 +37,7 @@ namespace CartStateMachine
         public void AddItem( string itemName , int quantity )
         {
             _currState.AddItem( itemName , quantity );   
-            if (!UpdateErrorFromState())
+            if (!UpdateErrorFromState() && (_currState is EmptyCartState))
             {
                 _currState = new AddedCartState( this );
             }
@@ -65,7 +65,7 @@ namespace CartStateMachine
         {
             _currState.RemoveItem(itemName);
 
-            if (_cartItems.Count < 1)
+            if (_cartItems.Count < 1 && !UpdateErrorFromState())
             {
                 _currState = new EmptyCartState( this );
             }
