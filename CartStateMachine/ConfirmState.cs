@@ -21,7 +21,6 @@ namespace CartStateMachine
             errorStatus = false;
             _cartItems = context.GetCartItems();
             _storeItems = context.GetStoreItems();
-            _paymentAmount = 0;
             _totalPrice = 0;
 
             Dictionary<string, int> storeRates = context.GetStoreRates();

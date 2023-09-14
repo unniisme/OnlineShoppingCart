@@ -37,14 +37,14 @@ namespace CartStateMachine
         {
             if (_storeItems.ContainsKey(itemName))
             {
-                int sumQuantity = 0;
+                int sumQuantity;
                 if (_cartItems.ContainsKey(itemName))
                 {
                     sumQuantity = quantity + _cartItems[itemName];
                 }
                 else
                 {
-                    _cartItems[itemName] = quantity;
+                    sumQuantity = quantity;
                 }
 
                 if (_storeItems[itemName] < sumQuantity)
@@ -65,7 +65,7 @@ namespace CartStateMachine
 
         public void Confirm()
         {
-            throw new NotImplementedException();
+            UnsetError();
         }
 
         public void PerformPayment( int amount )

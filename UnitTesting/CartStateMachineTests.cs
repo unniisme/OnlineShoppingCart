@@ -14,7 +14,7 @@ namespace UnitTesting
                 { "Wireless Headphone", 5 },
                 { "Men's T-Shirt", 7 },
                 { "Women's T-Shirt", 6 },
-                { "Viggies", 17 }
+                { "Veggies", 17 }
             };
 
             Dictionary<string , int> storeRates = new()
@@ -23,7 +23,7 @@ namespace UnitTesting
                 { "Wireless Headphone", 2300 },
                 { "Men's T-Shirt", 400 },
                 { "Women's T-Shirt", 700 },
-                { "Viggies", 30 }
+                { "Veggies", 30 }
             };
 
             ICartState cartContext = new Context(storeItems, storeRates);
@@ -42,7 +42,10 @@ namespace UnitTesting
             cartContext.AddItem( "Smart TV" , 2 );
             cartContext.AddItem( "Veggies" , 5 );
             cartContext.AddItem( "Wireless Headphone" , 3 );
-            Assert.Equals( cartContext.GetCartItems().Count , 3 );
+            Assert.AreEqual( cartContext.GetCartItems().Count , 3 );
+
+            cartContext.AddItem( "PC" , 2 );
+            Assert.IsTrue( cartContext.errorStatus , "Is able to add unknown item to cart, while in AddedCartState" );
 
             cartContext.AddItem( "Smart TV" , 2 );
             Assert.IsTrue( cartContext.errorStatus , "Able to overflow item in cart" );
@@ -59,9 +62,9 @@ namespace UnitTesting
             cartContext.PerformPayment( 3 * 2300 + 30 * 5 );
             Assert.IsFalse( cartContext.errorStatus, cartContext.errorMessage );
 
-            Assert.Equals( storeItems["Wireless Headphone"] , 2 );
-            Assert.Equals( storeItems["Veggie"] , 12 );
-            Assert.Equals( storeItems["Smart TV"] , 2 );
+            Assert.AreEqual( storeItems["Wireless Headphone"] , 2 );
+            Assert.AreEqual( storeItems["Veggies"] , 12 );
+            Assert.AreEqual( storeItems["Smart TV"] , 2 );
 
             cartContext.Confirm();
             Assert.IsTrue( cartContext.errorStatus , "Is able to confirm while cart is empty" );
