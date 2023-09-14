@@ -1,13 +1,32 @@
-﻿using CartStateMachine;
+﻿/******************************************************************************
+ * Filename    = CartStateMachineTests.cs
+ *
+ * Author      = unniisme
+ *
+ * Product     = OnlineShoppingCart
+ * 
+ * Project     = UnitTesting
+ *
+ * Description = unit tests for the CartStateMachine
+ *****************************************************************************/
+
+
+using CartStateMachine;
 
 namespace UnitTesting
 {
+    /// <summary>
+    /// Represents a test class for the <see cref="Context"/> class and its state transitions.
+    /// </summary>
     [TestClass]
     public class CartStateMachineTests
     {
         Dictionary<string , int> _storeItems = new();
         Dictionary<string , int> _storeRates = new();
 
+        /// <summary>
+        /// Initializes store items and rates for testing.
+        /// </summary>
         [TestInitialize]
         public void Initialize() 
         {
@@ -30,6 +49,9 @@ namespace UnitTesting
             };
         }
 
+        /// <summary>
+        /// Tests the addition of items to the shopping cart.
+        /// </summary>
         [TestMethod]
         public void AddItemTest()
         {
@@ -69,7 +91,9 @@ namespace UnitTesting
             Assert.IsTrue( cartContext.errorStatus , "Can overflow an item in the cart" );
         }
 
-
+        /// <summary>
+        /// Tests the removal of items from the shopping cart.
+        /// </summary>
         [TestMethod]
         public void RemoveItemTest()
         {
@@ -88,6 +112,9 @@ namespace UnitTesting
             Assert.IsFalse( cartContext.GetCartItems().ContainsKey( "Smart TV" ) , "'Smart TV' not removed from cart" );
         }
 
+        /// <summary>
+        /// Tests the confirmation of the shopping cart.
+        /// </summary>
         [TestMethod]
         public void ConfirmTest()
         {
@@ -108,6 +135,9 @@ namespace UnitTesting
             Assert.IsFalse( cartContext.errorStatus , cartContext.errorMessage );
         }
 
+        /// <summary>
+        /// Tests the payment process for the shopping cart.
+        /// </summary>
         [TestMethod]
         public void PerformPaymentTest()
         {
