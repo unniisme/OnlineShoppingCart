@@ -10,11 +10,16 @@ namespace CartStateMachine
         private readonly Dictionary<string, int> _cartItems;
         private readonly Dictionary<string, int> _storeItems;
 
-        public AddedCartState(Dictionary<string, int> cartItems, Dictionary<string, int> storeItems)
+        public Dictionary<string , int> GetCartItems() => _cartItems;
+        public Dictionary<string , int> GetStoreItems() => _storeItems;
+        public Dictionary<string , int> GetStoreRates() => new();
+
+
+        public AddedCartState(ICartState context)
         {
             errorStatus = false;
-            _storeItems = storeItems;
-            _cartItems = cartItems;
+            _storeItems = context.GetStoreItems();
+            _cartItems = context.GetCartItems();
         }
 
         private void SetError(string error)

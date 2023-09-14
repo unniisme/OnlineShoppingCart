@@ -2,7 +2,7 @@
 
 namespace CartStateMachine
 {
-    internal class Context : ICartState
+    public class Context : ICartState
     {
         public bool errorStatus { get; private set; }
         public string? errorMessage { get; private set; }
@@ -12,6 +12,10 @@ namespace CartStateMachine
         private readonly Dictionary<string , int> _storeRates;
 
         private ICartState _currState;
+
+        public Dictionary<string , int> GetCartItems() => _cartItems;
+        public Dictionary<string , int> GetStoreItems() => _storeItems;
+        public Dictionary<string , int> GetStoreRates() => _storeRates;
 
         private bool UpdateErrorFromState()
         {
@@ -27,7 +31,7 @@ namespace CartStateMachine
             _storeRates = storeRates;
             _cartItems = new Dictionary<string , int>();
 
-            _currState = new EmptyCartState(_cartItems, _storeItems);
+            _currState = new EmptyCartState(this);
         }
 
         public void AddItem( string itemName , int quantity )
@@ -35,7 +39,7 @@ namespace CartStateMachine
             _currState.AddItem( itemName , quantity );   
             if (!UpdateErrorFromState())
             {
-                _currState = new AddedCartState( _cartItems , _storeItems );
+                _currState = new AddedCartState( this );
             }
         }
 
@@ -44,7 +48,7 @@ namespace CartStateMachine
             _currState.Confirm();
             if (!UpdateErrorFromState())
             {
-                _currState = new ConfirmState( _cartItems , _storeRates );
+                _currState = new ConfirmState( this );
             }
         }
 
@@ -53,7 +57,7 @@ namespace CartStateMachine
             _currState.PerformPayment(amount);
             if (!UpdateErrorFromState())
             {
-                _currState = new EmptyCartState( _cartItems, _storeItems );
+                _currState = new EmptyCartState( this );
             }
         }
 
@@ -63,7 +67,7 @@ namespace CartStateMachine
 
             if (_cartItems.Count < 1)
             {
-                _currState = new EmptyCartState( _cartItems , _storeItems );
+                _currState = new EmptyCartState( this );
             }
         }
     }

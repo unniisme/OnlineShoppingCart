@@ -8,16 +8,23 @@ namespace CartStateMachine
         public string? errorMessage { get; private set; }
 
         private readonly Dictionary<string, int> _cartItems;
+        private readonly Dictionary<string, int> _storeItems;
 
-        private int _paymentAmount;
         private readonly int _totalPrice;
 
-        public ConfirmState(Dictionary<string, int> cartItems, Dictionary<string, int> storeRates)
+        public Dictionary<string , int> GetCartItems() => _cartItems;
+        public Dictionary<string , int> GetStoreItems() => _storeItems;
+        public Dictionary<string , int> GetStoreRates() => new();
+
+        public ConfirmState(ICartState context)
         {
             errorStatus = false;
-            _cartItems = cartItems;
+            _cartItems = context.GetCartItems();
+            _storeItems = context.GetStoreItems();
             _paymentAmount = 0;
             _totalPrice = 0;
+
+            Dictionary<string, int> storeRates = context.GetStoreRates();
 
             foreach (KeyValuePair<string, int> entry in _cartItems)
             {
@@ -47,15 +54,16 @@ namespace CartStateMachine
 
         public void PerformPayment( int amount )
         {
-            _paymentAmount += amount;
-
-            if (_paymentAmount < _totalPrice)
+            if (amount < _totalPrice)
             {
                 SetError("Insufficient amount for purchase");
             }
             else
             {
-                // Empty cart after payment
+                foreach (KeyValuePair<string, int> entry in _cartItems)
+                {
+                    _storeItems[entry.Key] -= entry.Value;
+                }
                 _cartItems.Clear();
                 UnsetError();
             }

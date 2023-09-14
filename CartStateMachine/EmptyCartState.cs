@@ -9,11 +9,15 @@
         private readonly Dictionary<string, int> _cartItems;
         private readonly Dictionary<string, int> _storeItems;
 
-        public EmptyCartState(Dictionary<string, int> cartItems, Dictionary<string, int> storeItems)
+        public Dictionary<string , int> GetCartItems() => _cartItems;
+        public Dictionary<string , int> GetStoreItems() => _storeItems;
+        public Dictionary<string , int> GetStoreRates() => new();
+
+        public EmptyCartState(ICartState context)
         {
             errorStatus = false;
-            _storeItems = storeItems;
-            _cartItems = cartItems;
+            _storeItems = context.GetStoreItems();
+            _cartItems = context.GetCartItems();
         }
 
         private void SetError(string error) 
